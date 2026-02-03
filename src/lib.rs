@@ -232,6 +232,18 @@ impl Display for Error {
     }
 }
 
+/// Font rendering mode for anti-aliasing.
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq, Hash)]
+pub enum RenderingMode {
+    /// No anti-aliasing, grid-fitted pixel rendering.
+    Aliased,
+    /// Grayscale anti-aliasing.
+    #[default]
+    Grayscale,
+    /// Subpixel (ClearType) rendering.
+    Subpixel,
+}
+
 pub trait Rasterize {
     /// Create a new Rasterizer.
     fn new() -> Result<Self, Error>
@@ -249,4 +261,10 @@ pub trait Rasterize {
 
     /// Kerning between two characters.
     fn kerning(&mut self, left: GlyphKey, right: GlyphKey) -> (f32, f32);
+
+    /// Set the font rendering mode (grayscale vs subpixel).
+    fn set_rendering_mode(&mut self, _mode: RenderingMode) {}
+
+    /// Enable or disable grid fitting (hinting).
+    fn set_grid_fitting(&mut self, _enabled: bool) {}
 }
